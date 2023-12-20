@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/assets/css/stylenav.css">
+    <style>
+
+         p {
+            text-align: center;
+            font-size: 20px;
+            margin-top: 200px;
+          }
+
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            margin-top: 100px;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+        }
+
+        .logo {
+            font-size: 24px;
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-bar ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-bar ul li {
+            margin-right: 20px;
+        }
+        .nav-bar a {
+            text-decoration: none;
+            color: white;
+        }
+        @media only screen and (max-width: 600px) {
+            .nav-bar {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background-color: #333;
+            }
+            .nav-bar.show {
+                display: flex;
+            }
+
+            .hamburger {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">FactoryInsights</div>
+        <div class="hamburger">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+        <nav class="nav-bar">
+            <ul>
+                <li><a href="{% url 'home' %}" class="active">Home</a></li>
+                {% if is_admin %}
+                    <li><a href="{% url 'userstable' %}" class="active">Users</a></li>
+                {% endif %}
+                <li><a href="{% url 'factories' %}" class="active">Factories</a></li>
+                <li><a href="{% url 'machines' %}" class="active">Machines</a></li>
+                <li><a href="{% url 'logout' %}" class="active">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+    <p> Welcome {{ user_name }}.</p>
+    <script>
+    </script>
+</body>
+</html>
