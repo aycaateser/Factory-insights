@@ -41,12 +41,12 @@ Uygulamanın deploy edilmiş linki->
 4. [x] token_payload = jwt.decode(access_token, settings.SECRET_KEY, algorithms=['HS256']):<span style="color:lightblue;"> JWT kütüphanesini kullanarak 'access_token' çerezini çözer. Bu adımda, çerezin içindeki bilgileri almak için kullanılan bir işlem gerçekleşir.
 </span>
 
-5.[x]  user_id=token_payload["user_id] ve email=token_payload["email] <span style="color:yellowgreen;"> Token içindeki user_id,email bilgilerini çıkarır.
+5. [x]  user_id=token_payload["user_id] ve email=token_payload["email] <span style="color:yellowgreen;"> Token içindeki user_id,email bilgilerini çıkarır.
 
-6.[x] request.user=CustomUser.objects.filter(email=email,id=user_id).first()
+6. [x] request.user=CustomUser.objects.filter(email=email,id=user_id).first()
 <span style="color:green;"> Gelen requesti tanımlamak için kullanılır.
 
-7.[x] except jwt.ExpiredSignatureError: ve except jwt.InvalidTokenError: <span style="color:purple;"> Token'ın süresi dolmuşsa veya geçerli bir JWT değilse, uygun hata mesajlarıyla birlikte HttpResponseForbidden (403 Forbidden) döner.
+7. [x] except jwt.ExpiredSignatureError: ve except jwt.InvalidTokenError: <span style="color:purple;"> Token'ın süresi dolmuşsa veya geçerli bir JWT değilse, uygun hata mesajlarıyla birlikte HttpResponseForbidden (403 Forbidden) döner.
 
 
 ### IS USER ADMIN VIEW
