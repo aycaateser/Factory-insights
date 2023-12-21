@@ -1,44 +1,47 @@
 # FACTORYINSIGHTS
 
+## Uygulamanın deploy edilmiş linki-> http://aycaateser.pythonanywhere.com/login/
 
-Uygulamanın deploy edilmiş linki-> 
+
+### <span style="color:sandybrown;"> Sisteme giriş yapabilmek için:(Admin kullanıcısı)
+* Email=admin@admin.com
+* Password=1234  
+
+#### Proje terminalinden yeni kullanıcı oluşturmak için örnek proje komut satırı:
+* python manage.py shell
+* from myapp.models.user import CustomUser
+* CustomUser.objects.create_user(email="deneme@deneme.com", password="123456",is_admin=True)
+
 
 ### Sistem Hakkında:
-
+* Her kullanıcı jwt ile bir access tokena sahiptir.
 * Sistem hangi kullanıcının giriş yaptığını anlar ve ismi giriş ekranına yazdırır.
 * Admin olmayan kullanıcı,kullanıcı tablosunu görüntüleyemez,kullanıcı ekleyemez ve değişiklik yapamaz.
 * Admin olan kullanıcı,kullanıcı tablosunu görüntüler,kullanıcı ekler ve değişiklik yapabilir.
 * Kullanıcı makinelere özellikler ekleyebilir ve güncelleyebilir.
+* Giriş yapmış kullanıcılar,fabrikaları ve fabrikalara ait makineleri görüntüleyebilir ve yönetebilir.
 
-
-
-#### Admin kullanıcısı oluşturmak için örnek proje komut satırı:
-
-* from myapp.models.user import CustomUser
-* CustomUser.objects.create_user(email="admin@admin.com", password="1234",is_admin=True)
 
 ## VIEWS
 
 ### LOGIN VIEW
-1. [x] POST isteği durumunda,POST isteğinin içindeki email ve password alanlarını alınır.
-2. [x] Veritabanındaki kullanıcıyı e-posta adresine göre filtrele. 
-3. [x] Burada 2 ihtimal var.Kullanıcı veritabanında bulunmazsa hata mesajıyla birlikte login.html sayfasına yönlendirir.
-4. [x] Girilen şifre,kullanıcının kayıtlı şifresiyle uyuşmazsa hata mesajıyla birlikte login.html'e gönderir.
-5. [x] Her kullanıcıya özel token oluşturulması. (token_payload)
-6. [x] Token oluşturulurken, bu bilgiler içeriğe eklenir ve ardından bu içerik, gizli bir anahtar (settings.SECRET_KEY içinde saklanan) kullanılarak imzalanır. İmzalanmış token, kullanıcıya verilir ve daha sonra gelen isteklerde token doğrulama için kullanılır. Bu, kullanıcının kimliğini doğrulamak ve belirli işlemleri gerçekleştirmesine izin vermek için güvenli bir yöntemdir. 
-7. [x] Access token cookie alanına set edilir.
-8. [x] GET isteği durumunda veya başarılı giriş olmadığında login.html sayfasına yönlendirir.
+1. [x] POST isteği durumunda,POST isteğinin içindeki email ve password alanları alınır.
+2. [x] Veritabanındaki kullanıcıyı e-posta adresine göre filtrelenir.
+3. [x] Burada 2 ihtimal vardır.Kullanıcı veritabanında bulunmazsa hata mesajıyla birlikte login.html sayfasına yönlendilir diğeri ise şifre,kullanıcının kayıtlı şifresiyle uyuşmazsa hata mesajıyla birlikte login.html'e gönderir.
+4. [x] Her kullanıcıya özel token oluşturulur. (token_payload)
+5. [x] Token oluşturulurken, bu bilgiler içeriğe eklenir ve ardından bu içerik, gizli bir anahtar (settings.SECRET_KEY içinde saklanan) kullanılarak imzalanır. İmzalanmış token, kullanıcıya verilir ve daha sonra gelen isteklerde token doğrulama için kullanılır. Bu, kullanıcının kimliğini doğrulamak ve belirli işlemleri gerçekleştirmesine izin vermek için güvenli bir yöntemdir. 
+6. [x] Access token cookie alanına set edilir.
+7. [x] GET isteği durumunda veya başarılı giriş olmadığında login.html sayfasına yönlendirir.
  
 
 ###  LOGIN REQUIRED DEKORATÖRÜ
 
-1. [x] <span style="color:pink;">access_token=request.COOKIES.get.("access_token")=GELEN HTTP isteğinin cookielerinden "access_token " adlı çerezi
-   alır.
+1. [x] <span style="color:pink;">access_token=request.COOKIES.get.("access_token")=GELEN HTTP isteğinin cookielerinden "access_token " adlı çerezi alır.
 2. [x] <span style="color:pink;">Bu çerez,kullanıcının oturum açma durumunu kontrol etmek için kullanılır.
 3. [x] if not access_token <span style="color:pink;">Eğer access_token çerezi yoksa kullanıcıyı giriş yapma sayfasına yönlendirir.
 </span>
 
-4. [x] token_payload = jwt.decode(access_token, settings.SECRET_KEY, algorithms=['HS256']):<span style="color:lightblue;"> JWT kütüphanesini kullanarak 'access_token' çerezini çözer. Bu adımda, çerezin içindeki bilgileri almak için kullanılan bir işlem gerçekleşir.
+4. [x] token_payload = jwt.decode(access_token, settings.SECRET_KEY, algorithms=['HS256']):<span style="color:lightblue;"> JWT kütüphanesini kullanarak 'access_token' çerezini çözer. Burada, çerezin içindeki bilgileri almak için kullanılan bir işlem gerçekleşir.
 </span>
 
 5. [x]  user_id=token_payload["user_id] ve email=token_payload["email] <span style="color:yellowgreen;"> Token içindeki user_id,email bilgilerini çıkarır.
@@ -63,7 +66,7 @@ Uygulamanın deploy edilmiş linki->
 
 ### USER REGISTER VIEW
 
-* is_user admin fonksiyonu giriş yapmıs kullanıcının adminmi yoksa user mı olduğunu kontrol eder.
+* is_user admin fonksiyonu giriş yapmış kullanıcının admin mi yoksa user mı olduğunu kontrol eder.
 * POST methodu ile veriler alınır.
 * Yeni bir CustomUser objesi oluşturulur,veritabanına kaydedilir.
 * Kullanıcı oluşturulduktan sonra users tablosunda görüntülenir.
@@ -90,7 +93,7 @@ Uygulamanın deploy edilmiş linki->
 
 ### FACTORY CREATE VIEW 
 
-*Fabrika kaydı gerçekleştirir.Fabrikada çalışanları ve kullanılan makineleri many to many fieldla bağlı olduğu için set eder.
+* Fabrika kaydı gerçekleştirir.Fabrikada çalışanları ve kullanılan makineleri many to many fieldla bağlı olduğu için set eder.
 
 ### GET MACHINES
 
@@ -102,18 +105,16 @@ Uygulamanın deploy edilmiş linki->
 * Giriş yapmış kullanıcının admin olup olmadığı kontrol edilir.
 * Yeni bir makine objesi oluşturulur ve veritabanına kaydedilir.
 * Makine oluşturulduktan sonra machines sayfasına yönlendirilir.
-* Eğer istek method'u POST değilse, muhtemelen bir GET isteği, bu durumda makine oluşturma formunu görüntülemek için gerekli bağlamı (context) hazırla
-return render(request, 'machine_create.html', context={'is_admin': is_admin})
+* Eğer istek method'u POST değilse, muhtemelen bir GET isteği, bu durumda makine oluşturma formunu görüntülemek için gerekli bağlamı (context) hazırlar -> return render(request, 'machine_create.html', context={'is_admin': is_admin})
 
 
 ### MACHINE UPDATE VIEW
 
-* Machine_id bulunamaz ise boş bir form açılır 
+* Machine_id bulunamaz ise boş bir form açılır.
 
 ### LOGOUT VIEW
 
 1.[x] request.COOKIES sözlüğünden 'access_token' adlı çerezi siler.Kullanıcının oturumunu sonlandırmak için mevcut oturum çerezini temizler ve login.html sayfasına yönlendirir.
-
 
 
 ### UYGULAMADAN RESİMLER
